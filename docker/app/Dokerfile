@@ -1,0 +1,26 @@
+FROM php:8-cli-alpine
+
+RUN apk update && apk add --update --no-cache bash coreutils openssl git make supervisor gzip
+
+RUN apk add --update zip unzip libzip-dev && docker-php-ext-install zip
+RUN apk add --update curl curl-dev && docker-php-ext-install curl
+RUN apk add --update sqlite && docker-php-ext-install pdo
+RUN apk add --update oniguruma-dev && docker-php-ext-install mbstring
+RUN apk add --update libpng-dev && docker-php-ext-install gd
+RUN apk add --update libxml2-dev && docker-php-ext-install simplexml
+RUN docker-php-ext-install dom
+RUN docker-php-ext-install opcache
+RUN apk add --update icu-dev && docker-php-ext-install intl
+RUN apk add --update libsodium-dev && docker-php-ext-install sodium
+RUN docker-php-ext-install sockets
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+RUN curl -sS https://get.symfony.com/cli/installer | bash && mv /root/.symfony/bin/symfony /usr/local/bin/symfony
+
+WORKDIR /app
+
+COPY supervisord.conf /etc/supervisord.conf
+COPY php.ini /usr/local/etc/php/php.ini
+
+CMD ["supervisord", "-c", "/etc/supervisord.conf"]
