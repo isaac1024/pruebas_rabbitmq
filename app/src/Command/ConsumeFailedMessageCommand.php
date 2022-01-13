@@ -16,8 +16,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 class ConsumeFailedMessageCommand extends Command
 {
-    public function __construct(private Bus $bus, private FailedMessageRepository $failedMessageRepository)
-    {
+    public function __construct(
+		private Bus $bus,
+		private FailedMessageRepository $failedMessageRepository
+    ) {
         parent::__construct();
     }
 

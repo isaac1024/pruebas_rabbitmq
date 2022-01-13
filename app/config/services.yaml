@@ -23,7 +23,7 @@ services:
 
     App\RabbitMq\RabbitMqConnection:
         arguments:
-            $host: 'rabbitmq'
+            $host: 'rabbitmq_pruebas'
             $port: 5672
             $user: 'admin'
             $password: '1234'

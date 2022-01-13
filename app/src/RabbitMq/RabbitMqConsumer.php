@@ -30,11 +30,13 @@ final class RabbitMqConsumer implements Consumer
 
         $channel = $this->connection->getChannel();
 
-        $channel->basic_consume($queue, '', false, false, false, false, $this->getCallback());
+        $channel->basic_consume(
+			$queue, '', false, false, false, false, $this->getCallback()
+        );
 
         $loopRetries = 50;
         while ($channel->is_consuming() && $loopRetries > 0 && !$this->stop){
-            dump($loopRetries);
+            dump("Contador consumo: $loopRetries");
             try {
                 $channel->wait(null, false, 6);
             } catch (AMQPTimeoutException $exception) {
@@ -51,23 +53,23 @@ final class RabbitMqConsumer implements Consumer
     {
         return function (AMQPMessage $message) {
             try {
-                if ($message->body === 'stopConsumer') {
-                    $this->stop = true;
-                    return;
-                }
-
                 if ($this->errors > 0) {
                     throw new \Exception('Error');
                 }
 
-                dump($message->body);
+                dump("Mensaje: $message->body");
+
+
+	            if ($message->body === 'stopConsumer') {
+		            $this->stop = true;
+	            }
             } catch (\Throwable $exception) {
                 --$this->errors;
 
                 /** @var AMQPTable $headers */
                 $headers = $message->get('application_headers');
                 $retries = $headers->getNativeData()['x-retries'] ?? 0;
-                dump($retries);
+                dump("Contador intento fallido: $retries");
 
                 if ($retries < 3) {
                     $headers->set('x-retries', $retries+1);

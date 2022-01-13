@@ -26,6 +26,7 @@ final class RabbitMqBus implements Bus
             $message->set('application_headers', $headers);
 
             $this->connection->publish($message, "", $routingKey);
+	        $this->connection->close();
         } catch (\Throwable $exception) {
             $failedMessage = new FailedMessage();
             $failedMessage->setMessage($message->body);

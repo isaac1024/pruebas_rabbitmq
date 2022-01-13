@@ -1,7 +1,7 @@
-GET http://localhost:8000
+GET http://localhost:3000
 Accept-Encoding: Application/json
 
 ###
 
-GET http://localhost:8000/stop
+GET http://localhost:3000/stop
 Accept-Encoding: Application/json

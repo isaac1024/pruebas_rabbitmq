@@ -30,17 +30,20 @@ final class RabbitMqConnection implements Connection
         return $this->channel;
     }
 
-    public function publish(AMQPMessage $message, string $exchange, string $routingKey): void
-    {
+    public function publish(
+		AMQPMessage $message,
+		string $exchange,
+		string $routingKey
+    ): void {
         $this->getChannel()->basic_publish($message, $exchange, $routingKey);
-
-        $this->connection->close();
     }
 
     private function connect(): void
     {
         if (!$this->connection) {
-            $this->connection = new AMQPStreamConnection($this->host, $this->port, $this->user, $this->password);
+            $this->connection = new AMQPStreamConnection(
+				$this->host, $this->port, $this->user, $this->password
+            );
         }
 
         $this->channel = $this->connection->channel();
