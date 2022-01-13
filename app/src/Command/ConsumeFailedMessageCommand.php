@@ -38,6 +38,7 @@ class ConsumeFailedMessageCommand extends Command
         }
 
         $this->bus->publish($failedMessage->getMessage(), $failedMessage->getQueue());
+        $this->failedMessageRepository->delete($failedMessage);
 
         return Command::SUCCESS;
     }

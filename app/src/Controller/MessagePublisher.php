@@ -15,9 +15,17 @@ final class MessagePublisher
     }
 
     #[Route('/')]
-    public function __invoke(): JsonResponse
+    public function message(): JsonResponse
     {
         $this->bus->publish('{"message": "Ok"}', 'work_queue');
+
+        return new JsonResponse();
+    }
+
+    #[Route('/stop')]
+    public function stop(): JsonResponse
+    {
+        $this->bus->publish('stopConsumer', 'work_queue');
 
         return new JsonResponse();
     }

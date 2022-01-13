@@ -6,12 +6,6 @@ use App\Entity\FailedMessage;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @method FailedMessage|null find($id, $lockMode = null, $lockVersion = null)
- * @method FailedMessage|null findOneBy(array $criteria, array $orderBy = null)
- * @method FailedMessage[]    findAll()
- * @method FailedMessage[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
 class FailedMessageRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -19,32 +13,15 @@ class FailedMessageRepository extends ServiceEntityRepository
         parent::__construct($registry, FailedMessage::class);
     }
 
-    // /**
-    //  * @return FailedMessage[] Returns an array of FailedMessage objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function save(FailedMessage $failedMessage): void
     {
-        return $this->createQueryBuilder('f')
-            ->andWhere('f.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('f.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $this->_em->persist($failedMessage);
+        $this->_em->flush();
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?FailedMessage
+    public function delete(FailedMessage $failedMessage): void
     {
-        return $this->createQueryBuilder('f')
-            ->andWhere('f.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $this->_em->remove($failedMessage);
+        $this->_em->flush();
     }
-    */
 }
